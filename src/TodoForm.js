@@ -1,9 +1,11 @@
 import React, { Component,PropTypes } from 'react';
 import { View, Image,Button, TextInput } from 'react-native';
 import Todo from '../modele/Todo'
+import{ connect } from 'react-redux'
+import {addToDo, removeAll} from './actions/todos.action';
 
 
-export default class TodoForm extends Component {
+export class TodoForm extends Component {
  
 
     constructor(props){
@@ -16,12 +18,12 @@ export default class TodoForm extends Component {
 
     add(){
         if(this.title!=null && this.title!=''){
-        this.props.addTodo(this.title)
+        this.props.addToDoAction(this.title);
         }
     }
     
     reset(){
-        this.props.resetTodos()
+        this.props.removeAll();
     }
 
     render() {
@@ -46,3 +48,13 @@ export default class TodoForm extends Component {
         );
     }
 }
+
+
+function mapDispatchToProps(dispatch) {
+    return {
+        addToDoAction: title => dispatch(addToDo(title)),
+        removeAll: () => dispatch(removeAll()),
+    }
+}
+
+export default connect(undefined, mapDispatchToProps)(TodoForm)

@@ -5,7 +5,7 @@
  */
 
 import React, { Component } from 'react';
-import App from './src/App'
+import App from './src/screen'
 import {
   AppRegistry,
   StyleSheet,

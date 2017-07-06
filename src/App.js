@@ -3,8 +3,9 @@ import { View, Image,Text } from 'react-native';
 import Todo from '../modele/Todo'
 import TodoList from './TodoList'
 import TodoForm  from './TodoForm'
+import{ connect } from 'react-redux'
 
-export default class App extends Component {
+export class App extends Component {
 
     constructor(props){
         super(props)
@@ -14,32 +15,8 @@ export default class App extends Component {
         }
 
         this.changetab = this.changetab.bind(this);
-        this.addTodo = this.addTodo.bind(this);
-        this.resetTodos = this.resetTodos.bind(this)
     }
 
-    addTodo(title){
-        
-        if(title!=""){
-            const newTodo = new Todo();
-            newTodo.title=title
-            newTodo.id=this.state.todoList.length.toString()
-            newTodo.isDone=false
-
-            this.setState({
-                
-                todoList: [...this.state.todoList, newTodo]
-            })
-        
-        }
-    }
-
-    resetTodos(){
-
-        this.setState({
-            todoList: []
-        })
-    }
     changetab(Todo){
         let index=this.state.todoList.findIndex(x => x.id == Todo.id)
        
@@ -48,13 +25,13 @@ export default class App extends Component {
     }
 
     getList(){
-        if(this.state.todoList.length==0){
+        if(this.props.todoList.length==0){
             return (
                 <Text> Vous n'avez aucun TODO ! </Text>
             );
         }
         else{
-            return ( <TodoList todoList={this.state.todoList} changeTab={this.changetab} ></TodoList>
+            return ( <TodoList todoList={this.props.todoList} changeTab={this.changetab} ></TodoList>
             );
         }
     }
@@ -62,11 +39,22 @@ export default class App extends Component {
         const list = this.getList()
         return (
             <View>
-                <Text> Il y a {this.state.todoList.length} élément(s) </Text>
-                <TodoForm addTodo={this.addTodo} resetTodos={this.resetTodos}></TodoForm>
+                <Text> Il y a {this.props.todoList.length} élément(s) </Text>
+                <TodoForm ></TodoForm>
                 {list}
                 
             </View>
         );
     }
 }
+
+
+
+function mapStateToProps(state) {
+    return {
+        todoList: state.todoReducer.todos
+    }
+}
+
+
+export default connect(mapStateToProps, undefined)(App)
